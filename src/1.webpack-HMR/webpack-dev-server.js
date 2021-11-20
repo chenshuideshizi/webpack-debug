@@ -13,6 +13,7 @@ class Server {
     let lastHash
     let sockets = []
     compiler.hooks.done.tap('webpack-dev-server', stats => {
+      console.log('stats.fullHash', stats.fullHash) // TODO:为什么拿不到 stats.fullHash
       lastHash = stats.hash
 
       sockets.forEach(socket => {

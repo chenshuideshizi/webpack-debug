@@ -8,8 +8,8 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: path.join(__dirname, 'dist'),
-    hotUpdateChunkFilename: '[hash].hot-update.js',
-    hotUpdateMainFilename: '[hash].hot-update.json'
+    hotUpdateChunkFilename: '[id].fullhash.hot-update.js',
+    hotUpdateMainFilename: 'main.fullhash.hot-update.json'
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist')
@@ -18,6 +18,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template:'./src/index.html',
       filename: 'index.html'
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin()
   ]
 }

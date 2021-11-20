@@ -1,1 +1,1 @@
-module.exports = 'hello webpack1 232'
+module.exports = 'hello 777'

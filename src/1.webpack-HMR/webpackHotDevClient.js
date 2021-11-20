@@ -5,10 +5,12 @@ const onConnected = () => {
   console.log('客户端已经连接')
   // 6. 客户端会监听到些 hash 消息
   socket.on('hash', hash => {
+    console.log('hash事件:', hash)
     currentHash = hash
   })
   // 7. 客户端收到 ok 的消息
   socket.on('ok', () => {
+    console.log('ok 事件:')
     hotCheck()
   })
   socket.on('disconnect', () => {
@@ -17,7 +19,8 @@ const onConnected = () => {
 }
 // 8. 执行 hotCheck 方法进行更新
 function hotCheck() {
-  if (!lastHash || lastHash !== currentHash) {
+  debugger
+  if (!lastHash || lastHash === currentHash) {
     return (lastHash = currentHash)
   }
   // 9. 向 server 端发送 Ajax 请求,服务端返回一个 hot-update.json 文件, 该文件包含了所有要更新的模块的 hash 值和 chunk 名
@@ -32,13 +35,17 @@ function hotCheck() {
 }
 
 function hotDownloadUpdateChunk(chunkId) {
+  debugger
   var script = document.createElement('script')
   script.charset = 'utf8'
-  script.src = '/' + chunkId + '.' + lastHash + '.hot-update.js'
+  // script.src = '/' + chunkId + '.' + lastHash + '.hot-update.js' // TODO:hash有问题
+  script.src = '/' + 'main' + '.' + 'fullhash' + '.hot-update.js'
   document.head.appendChild(script)
 }
 function hotDonwloadManifest() {
-  var url = '/' + lastHash + '.hot-update.json'
+  debugger
+  // var url = '/' + lastHash + '.hot-update.json' // TODO:hash有问题
+  var url = '/' + 'main.fullhash' + '.hot-update.json'
   return fetch(url).then(res => res.json()).catch(error => {console.log(error)})
 }
 // 11. 补丁JS取回来后调用 webpackHotUpdate 方法
