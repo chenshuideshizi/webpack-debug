@@ -2,6 +2,7 @@
  * webpack 的工作流程
  */
 const fs = require('fs')
+const path = require('path')
 let { SyncHook } = require('tapable')
 class Compiler {
   constructor(options) { 
@@ -21,17 +22,17 @@ class Compiler {
     // 从入口出发，调用所有配置的Loader对模块进行编译，再找出该模块的所有依赖模块
     // 递归本步骤直到所有入口依赖文件都经过了本步骤
     // 1. 读到模块内容 
-    let entryContent = require(entry, 'utf-8')
+    let entryContent = fs.readFileSync(entry, 'utf-8')
     let entrySource = babelLoader(entryContent)
     let entryModule = {id: entry, source: entrySource}
     modules.push(entryModule)
     // 把入口模块的代码转到抽像语法树AST，分析里面的 import 和 require 依赖
-    let title = path.join(this.optinos.context, './src/title.js')
-    let titleContent = require(title, 'utf-8')
+    let title = path.join(this.options.context, './src/title.js')
+    let titleContent = fs.readFileSync(title, 'utf-8')
     let titleSource = babelLoader(titleContent)
     // module 模块  chunk 代码块 bundle 文件
     let titleModule = {id: title, source: titleSource}
-    module.push(titleModule)
+    modules.push(titleModule)
     // 根据入口和模块之前的关系,组装成一个个包含多个模块的 chunk
     let chunk = {name: 'main', modules}
     chunks.push(chunk)
@@ -43,8 +44,8 @@ class Compiler {
     files.push(file)
 
     // 再确定好输出的之入以后，根据输出的路径和文件名，把文件的内容写入到文件系统
-    let outputPath = path.join(this.options.output.path, this.options.ouput.filename)
-    fs.writeFileSync(outputPath, file.source, 'utf-8')
+    let outputPath = path.join(this.options.output.path, this.options.output.filename)
+    fs.writeFileSync(outputPath, '这里是代码', 'utf-8')
     this.hooks.done.call()
   }
   done() {
@@ -57,7 +58,7 @@ class Compiler {
  */
 let options = require('./webpack.config')
 // 开始编译：用上一步得到的参数初始化 Compiler 参数
-let compiler = new Compiler(optinos)
+let compiler = new Compiler(options)
 // 2. 加载所有的配置插件，并执行 run 方法开始执行编译
 if (options.plugins && Array.isArray(options.plugins)) {
   for (const plugin of options.plugins) {
