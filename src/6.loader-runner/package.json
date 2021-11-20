@@ -1,0 +1,17 @@
+{
+  "name": "6.loader-runner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "loader-runner": "^4.2.0",
+    "webpack": "^5.64.1",
+    "webpack-cli": "^4.9.1"
+  }
+}
